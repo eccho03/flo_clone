@@ -8,21 +8,22 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.gson.Gson
 import org.techtown.flo.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
-
     private var song : Song = Song()
+    private var gson : Gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_FLO)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        song = Song(binding.mainMiniplayerTitleTv.text.toString(), binding.mainMiniplayerSingerTv.text.toString(), 0, 60, false)
+
+        initBottomNavigation()
 
         binding.mainPlayerCl.setOnClickListener {
             //intent: 하나의 activity에서 사용하는 택배 상자
@@ -32,13 +33,12 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("second", song.second)
             intent.putExtra("playTime", song.playTime)
             intent.putExtra("isPlaying", song.isPlaying)
+            intent.putExtra("music", song.music)
             startActivity(intent)
             //2주차 미션
             //Toast.makeText(this.applicationContext, song.title, Toast.LENGTH_SHORT).show()
             //getResultText.launch(intent)
         }
-
-        initBottomNavigation()
     }
 
     // 2주차 미션
@@ -92,10 +92,27 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        private fun setMiniPlayer(song : Song) {
-            binding.mainMiniplayerTitleTv.text = song.title
-            binding.mainMiniplayerSingerTv.text = song.singer
+    private fun setMiniPlayer(song : Song) {
+        binding.mainMiniplayerTitleTv.text = song.title
+        binding.mainMiniplayerSingerTv.text = song.singer
+        binding.mainMiniplayerProgressSb.progress = (song.second*100000)/song.playTime
+    }
+
+    // 액티비티 전환 시 onStart부터 시작됨 (화면에 표시되기 직전)
+    override fun onStart() {
+        super.onStart()
+        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+        val songJson = sharedPreferences.getString("songData", null)
+
+        song = if (songJson == null) {
+            Song("라일락", "아이유(IU)", 0, 60, false, "music_lilac")
+        } else {
+            gson.fromJson(songJson, Song::class.java)
         }
+
+        setMiniPlayer(song)
+
+    }
 
 
 }
