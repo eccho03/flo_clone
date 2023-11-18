@@ -21,30 +21,8 @@ class SongActivity : AppCompatActivity(){
         setContentView(binding.root)
 
         initSong()
-        initClickListener()
         setPlayer(song)
 
-        //재생버튼
-        binding.songMiniplayerIv.setOnClickListener {
-            //주석은 2주차 미션
-//            val intent = Intent(this, MainActivity::class.java).apply {
-//                putExtra(MainActivity.STRING_INTENT_KEY, binding.songMusicTitleTv.text)
-//            }
-            setResult(Activity.RESULT_OK, intent)
-            if (isFinishing) finish()
-            setPlayerStatus(false)
-        }
-        binding.songPauseIv.setOnClickListener {
-            setPlayerStatus(true)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        timer.interrupt()
-    }
-
-    private fun initClickListener(){
         binding.songDownIb.setOnClickListener {
             finish()
         }
@@ -56,12 +34,31 @@ class SongActivity : AppCompatActivity(){
         binding.songPauseIv.setOnClickListener {
             setPlayerStatus(false)
         }
+//        initClickListener()
+//        setPlayer(song)
+//
+//        //재생버튼
+//        binding.songMiniplayerIv.setOnClickListener {
+//            //주석은 2주차 미션
+////            val intent = Intent(this, MainActivity::class.java).apply {
+////                putExtra(MainActivity.STRING_INTENT_KEY, binding.songMusicTitleTv.text)
+////            }
+//            setResult(Activity.RESULT_OK, intent)
+//            if (isFinishing) finish() // Activity가 종료되었는지 여부 판단할 때 사용되는 값
+//            // 현재 코드에서는 아직 activity가 종료가 되지 않았으니 !isFinishing이어서 finish() 호출됨
+//            setPlayerStatus(true)
+//        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timer.interrupt()
     }
 
 
     private fun initSong() {
         if (intent.hasExtra("title") && intent.hasExtra("singer")) {
-            song = Song(
+            song = Song (
                 intent.getStringExtra("title")!!,
                 intent.getStringExtra("singer")!!,
                 intent.getIntExtra("second", 0),
@@ -69,7 +66,6 @@ class SongActivity : AppCompatActivity(){
                 intent.getBooleanExtra("isPlaying", false)
             )
         }
-
         startTimer()
     }
 
@@ -79,19 +75,21 @@ class SongActivity : AppCompatActivity(){
         binding.songStartTimeTv.text = String.format("%02d:%02d", song.second / 60, song.second % 60)
         binding.songEndTimeTv.text = String.format("%02d:%02d", song.playTime / 60, song.playTime % 60)
         binding.songProgressSb.progress = (song.second * 1000 / song.playTime)
+
+        setPlayerStatus(song.isPlaying)
     }
 
     fun setPlayerStatus(isPlaying : Boolean) {
 
-//        song.isPlaying = isPlaying
-//        timer.isPlaying = isPlaying
+        song.isPlaying = isPlaying
+        timer.isPlaying = isPlaying
 
         if(isPlaying){
-            binding.songMiniplayerIv.visibility = View.VISIBLE
-            binding.songPauseIv.visibility = View.GONE
-        } else {
             binding.songMiniplayerIv.visibility = View.GONE
             binding.songPauseIv.visibility = View.VISIBLE
+        } else {
+            binding.songMiniplayerIv.visibility = View.VISIBLE
+            binding.songPauseIv.visibility = View.GONE
 
         }
     }
