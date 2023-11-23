@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.tabs.TabLayoutMediator
 import org.techtown.flo.databinding.FragmentLockerBinding
 
 class LockerFragment : Fragment() {
@@ -19,7 +20,12 @@ class LockerFragment : Fragment() {
               binding = FragmentLockerBinding.inflate(inflater, container, false)
 
               val lockerAdapter = LockerVPAdapter(this)
-              //binding.lockerContentVp.adapter = lockerAdapter(this)
+              binding.lockerContentVp.adapter = lockerAdapter
+              TabLayoutMediator(binding.lockerContentTb, binding.lockerContentVp) {
+                     tab, position ->
+                     tab.text = informaiton[position]
+              }.attach()
+
               return binding.root
        }
 }

@@ -8,7 +8,8 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_flo_logo"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FLO">
+        android:theme="@style/Theme.FLO"
+        android:minSdkVersion="31">
         <activity
             android:name=".MainActivity"
             android:exported="true"
