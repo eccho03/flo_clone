@@ -14,6 +14,7 @@ import org.techtown.flo.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
+
     private var song : Song = Song()
     private var gson : Gson = Gson()
 
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         inputDummySongs()
+        inputDummyAlbums()
         initBottomNavigation()
 
         binding.mainPlayerCl.setOnClickListener {
@@ -53,44 +55,44 @@ class MainActivity : AppCompatActivity() {
 //        }
 //
 //    }
-        private fun initBottomNavigation(){
+    private fun initBottomNavigation(){
 
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, HomeFragment())
-                .commitAllowingStateLoss()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_frm, HomeFragment())
+            .commitAllowingStateLoss()
 
-            binding.mainBnv.setOnItemSelectedListener{ item ->
-                when (item.itemId) {
+        binding.mainBnv.setOnItemSelectedListener{ item ->
+            when (item.itemId) {
 
-                    R.id.homeFragment -> {
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.main_frm, HomeFragment())
-                            .commitAllowingStateLoss()
-                        return@setOnItemSelectedListener true
-                    }
-
-                    R.id.lookFragment -> {
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.main_frm, LookFragment())
-                            .commitAllowingStateLoss()
-                        return@setOnItemSelectedListener true
-                    }
-                    R.id.searchFragment -> {
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.main_frm, SearchFragment())
-                            .commitAllowingStateLoss()
-                        return@setOnItemSelectedListener true
-                    }
-                    R.id.lockerFragment -> {
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.main_frm, LockerFragment())
-                            .commitAllowingStateLoss()
-                        return@setOnItemSelectedListener true
-                    }
+                R.id.homeFragment -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, HomeFragment())
+                        .commitAllowingStateLoss()
+                    return@setOnItemSelectedListener true
                 }
-                false
+
+                R.id.lookFragment -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, LookFragment())
+                        .commitAllowingStateLoss()
+                    return@setOnItemSelectedListener true
+                }
+                R.id.searchFragment -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, SearchFragment())
+                        .commitAllowingStateLoss()
+                    return@setOnItemSelectedListener true
+                }
+                R.id.lockerFragment -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, LockerFragment())
+                        .commitAllowingStateLoss()
+                    return@setOnItemSelectedListener true
+                }
             }
+            false
         }
+    }
 
     private fun setMiniPlayer(song : Song) {
         binding.mainMiniplayerTitleTv.text = song.title
@@ -98,13 +100,11 @@ class MainActivity : AppCompatActivity() {
         binding.mainMiniplayerProgressSb.progress = (song.second*100000)/song.playTime
     }
 
-    private fun inputDummySongs() {
+    private fun inputDummySongs(){
         val songDB = SongDatabase.getInstance(this)!!
-        val songs = songDB?.SongDao()?.getSongs()
+        val songs = songDB.SongDao().getSongs()
 
-        if (songs != null) {
-            if (songs.isNotEmpty()) return
-        }
+        if (songs.isNotEmpty()) return
 
         songDB.SongDao().insert(
             Song(
@@ -190,6 +190,50 @@ class MainActivity : AppCompatActivity() {
         Log.d("DB data", _songs.toString())
     }
 
+    //ROOM_DB
+    private fun inputDummyAlbums() {
+        val songDB = SongDatabase.getInstance(this)!!
+        val albums = songDB.AlbumDao().getAlbums()
+
+        if (albums.isNotEmpty()) return
+
+        songDB.AlbumDao().insert(
+            Album(
+                0,
+                "IU 5th Album 'LILAC'", "아이유 (IU)", R.drawable.img_album_exp2
+            )
+        )
+
+        songDB.AlbumDao().insert(
+            Album(
+                1,
+                "Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp
+            )
+        )
+
+        songDB.AlbumDao().insert(
+            Album(
+                2,
+                "iScreaM Vol.10 : Next Level Remixes", "에스파 (AESPA)", R.drawable.img_album_exp3
+            )
+        )
+
+        songDB.AlbumDao().insert(
+            Album(
+                3,
+                "MAP OF THE SOUL : PERSONA", "방탄소년단 (BTS)", R.drawable.img_album_exp4
+            )
+        )
+
+        songDB.AlbumDao().insert(
+            Album(
+                4,
+                "GREAT!", "모모랜드 (MOMOLAND)", R.drawable.img_album_exp5
+            )
+        )
+
+    }
+
     // 액티비티 전환 시 onStart부터 시작됨 (화면에 표시되기 직전)
     override fun onStart() {
         super.onStart()
@@ -216,8 +260,5 @@ class MainActivity : AppCompatActivity() {
         setMiniPlayer(song)
 
     }
-
-
-
 
 }
