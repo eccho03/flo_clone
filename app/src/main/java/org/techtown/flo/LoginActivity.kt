@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
 
         user?.let {
             Log.d("LOGIN_ACT/GET_USER", "userId : ${user.id}, $user")
-            saveJwt(user.id)
+            //saveJwt(user.id)
             startActivity()
         }
     }
@@ -56,9 +56,27 @@ class LoginActivity : AppCompatActivity() {
         editor.apply()
     }
 
+//    private fun saveJwt2(jwt: String) {
+//        val spf = getSharedPreferences("auth", MODE_PRIVATE)
+//        val editor = spf.edit()
+//
+//        editor.putString("jwt", jwt)
+//        editor.apply()
+//    }
+
     private fun startActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
+//
+//    override fun onLoginSuccess(code: Int, result: Result) {
+//        when(code) {
+//            1000 -> saveJwt2()
+//        }
+//    }
+//
+//    override fun onLoginFailure() {
+//        TODO("Not yet implemented")
+//    }
 
 }

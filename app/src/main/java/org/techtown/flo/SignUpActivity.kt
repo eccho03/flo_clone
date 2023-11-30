@@ -6,6 +6,9 @@ import android.widget.Toast
 
 import androidx.appcompat.app.AppCompatActivity
 import org.techtown.flo.databinding.ActivitySignupBinding
+import retrofit2.Call
+import retrofit2.Response
+import javax.security.auth.callback.Callback
 
 
 class SignUpActivity : AppCompatActivity() {
@@ -27,8 +30,9 @@ class SignUpActivity : AppCompatActivity() {
     private fun getUser(): User {
         val email : String = binding.signUpIdEt.text.toString() + "@" + binding.signUpDirectInputEt.text.toString()
         val pwd : String = binding.signUpPasswordEt.text.toString()
+        var name: String = binding.signUpNameEt.text.toString()
 
-        return User(email, pwd)
+        return User(email, pwd, name)
     }
 
     private fun signUp() {
@@ -47,5 +51,32 @@ class SignUpActivity : AppCompatActivity() {
         val user = userDB.UserDao().getUsers()
         Log.d("SIGNUPACT", user.toString())
     }
+
+//    private fun signUp() {
+//        if (binding.signUpIdEt.text.toString().isEmpty() || binding.signUpDirectInputEt.text.toString().isEmpty()) {
+//            Toast.makeText(this, "이메일 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show()
+//            return
+//        }
+//        if (binding.signUpNameEt.text.toString().isEmpty() || binding.signUpDirectInputEt.text.toString().isEmpty()) {
+//            Toast.makeText(this, "이름 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show()
+//            return
+//        }
+//        if (binding.signUpPasswordEt.text.toString().isEmpty() != binding.signUpPasswordCheckEt.text.toString().isEmpty()) {
+//            Toast.makeText(this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+//            return
+//        }
+//
+//        val authService = AuthService()
+//        authService.setSignUpView(this)
+//
+//        authService.signUp(getUser())
+//    }
+//
+//    override fun onSignUpSuccess() {
+//        finish()
+//    }
+//    override fun onSignUpFailure() {
+//        //실패 처리
+//    }
 
 }

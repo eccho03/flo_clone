@@ -55,9 +55,9 @@ class AlbumFragment : Fragment() {
         binding.albumSingerNameTv.text = album.singer.toString()
 
         if (isLiked) {
-            binding.albumAlbumIv.setImageResource(R.drawable.ic_my_like_on)
+            binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_on)
         } else {
-            binding.albumAlbumIv.setImageResource(R.drawable.ic_my_like_off)
+            binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_off)
         }
     }
 
